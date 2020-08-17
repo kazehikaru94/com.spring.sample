@@ -28,6 +28,30 @@
 		    <artifactId>spring-orm</artifactId>
 		    <version>5.2.8.RELEASE</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf -->
+		<dependency>
+		    <groupId>org.thymeleaf</groupId>
+		    <artifactId>thymeleaf</artifactId>
+		    <version>3.0.11.RELEASE</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring5 -->
+		<dependency>
+		    <groupId>org.thymeleaf</groupId>
+		    <artifactId>thymeleaf-spring5</artifactId>
+		    <version>3.0.11.RELEASE</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-extras -->
+		<dependency>
+		    <groupId>org.apache.tiles</groupId>
+		    <artifactId>tiles-extras</artifactId>
+		    <version>3.0.8</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-servlet -->
+		<dependency>
+    		<groupId>org.apache.tiles</groupId>
+    		<artifactId>tiles-servlet</artifactId>
+    		<version>3.0.8</version>
+  		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.tiles/tiles-jsp -->
 		<dependency>
 		    <groupId>org.apache.tiles</groupId>
@@ -81,7 +105,12 @@
 		    <artifactId>jackson-dataformat-xml</artifactId>
 		    <version>2.11.2</version>
 		</dependency>
-								
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+		    <groupId>org.json</groupId>
+		    <artifactId>json</artifactId>
+		    <version>20200518</version>
+		</dependency>
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -159,6 +188,24 @@
         <configuration>
           <warSourceDirectory>WebContent</warSourceDirectory>
         </configuration>
+      </plugin>
+      <plugin>
+         <groupId>com.gitlab.haynes</groupId>
+         <artifactId>libsass-maven-plugin</artifactId>
+         <version>0.2.24</version>
+         <executions>
+            <execution>
+               <phase>generate-resources</phase>
+               <goals>
+                  <goal>compile</goal>
+               </goals>
+            </execution>
+         </executions>
+         <configuration>
+            <inputPath>${basedir}/src/sass/</inputPath>
+            <outputPath>${basedir}/target/</outputPath>
+            <!-- <includePath>${basedir}/src/main/sass/plugins/</includePath> -->
+         </configuration>
       </plugin>
     </plugins>
   </build>

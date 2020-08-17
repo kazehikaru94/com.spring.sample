@@ -5,6 +5,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.spring.sample.entity.User;
+import com.spring.sample.util.CommonUtil;
 
 public class UserModel {
 	private Integer id;
@@ -69,6 +70,10 @@ public class UserModel {
 	public void setConfirmation(String confirmation) {
 		this.confirmation = confirmation;
 	}
+	
+	public String getGravatarURL() {
+		return CommonUtil.gravatarURL(this.email);
+	}
 
 	public static UserModel build(User user) {
 		UserModel userModel = new UserModel();
@@ -86,6 +91,13 @@ public class UserModel {
 		user.setEmail(this.getEmail());
 		user.setPassword(this.getPassword());
 		return user;
+	}
+	
+	public void make(User user) {
+		user.setId(this.getId());
+		user.setName(this.getName());
+		user.setEmail(this.getEmail());
+		user.setPassword(this.getPassword());
 	}
 
 }

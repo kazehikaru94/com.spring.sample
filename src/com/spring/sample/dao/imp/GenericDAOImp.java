@@ -41,7 +41,7 @@ public abstract class GenericDAOImp<E, Id extends Serializable> extends Hibernat
 
 	public E find(Id id, boolean lock) throws Exception {
 		if (lock) {
-			return getHibernateTemplate().load(getPersistentClass(), id, LockMode.WRITE);
+			return getHibernateTemplate().load(getPersistentClass(), id, LockMode.PESSIMISTIC_WRITE);
 		} else {
 			return getHibernateTemplate().get(getPersistentClass(), id);
 		}

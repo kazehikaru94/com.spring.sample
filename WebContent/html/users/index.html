@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html th:replace="~{templates/layout :: layout(~{::title}, ~{::body}, ~{})}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="templates/layout :: common_header(~{::title},~{})">
+  <title th:text="#{user.index.title}">Users</title>
+</head>
+<body>
+  <h2 th:text="#{user.index.all}">All Users</h2>
+
+  <ul class="users">
+    <li th:each="user : ${users}" th:id="'user_'+${user.id}">
+      <img th:attr="src=${user.gravatarURL}" class="gravatar" />
+      <a th:href="@{'/users/'+${user.id}}" th:text="${user.name}"></a>
+      | <a th:href="@{'/users/'+${user.id}+'/edit'}"
+        th:text="#{user.edit}">Edit</a>
+      | <a class="delete-user" th:href="@{'/users/'+${user.id}}"
+        th:text="#{user.delete}" th:data-id="${user.id}">Delete</a>
+    </li>
+  </ul>
+</body>
+</html>
