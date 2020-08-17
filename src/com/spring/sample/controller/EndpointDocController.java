@@ -17,7 +17,7 @@ public class EndpointDocController {
 	}
 
 	@RequestMapping(value = "/endpointdoc", method = RequestMethod.GET)
-	public String show(Model model) {
+	public String enpoint(Model model) {
 		model.addAttribute("handlerMethods", this.handlerMapping.getHandlerMethods());
 		return "handler_mapping";
 	}

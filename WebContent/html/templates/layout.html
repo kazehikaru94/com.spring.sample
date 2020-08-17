@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html th:fragment="layout (title, content, links)" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:replace="${title}">[[#{meta.title}]]</title>
+  <meta name="description" th:attr="content=#{meta.description}" />
+  <meta name="keywords" th:attr="content=#{meta.keywords}" />
+	
+  <!-- Common styles and scripts -->
+  <link rel="stylesheet" type="text/css" media="all" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" media="all" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" type="text/css" media="all" th:href="@{/resources/css/custom.css}">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script type="text/javascript" th:src="@{/resources/js/custom.js}"></script>
+  <link rel="shortcut icon" th:href="@{/resources/img/favicon.ico}">
+
+  <!--/* Per-page placeholder for additional links */-->
+  <th:block th:replace="${links}" />
+</head>
+<body>
+  <div th:unless="${flash.isEmptyMessage()}" th:each="key : ${flash.getMessage().keySet()}" th:class="'alert alert-'+${flash.getMessage().get(key)}+' alert-dismissible'" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+	  <span aria-hidden="true">&times;</span>
+    </button>
+    [[#{${key}}]]
+  </div>
+  <header th:replace="templates/_header :: copy"></header>     
+  <div class="container">
+    <div th:replace="${content}">
+        <p>Layout content</p>
+    </div>
+    <footer th:replace="templates/_footer :: copy"></footer> 
+  </div>  
+</body>
+</html>

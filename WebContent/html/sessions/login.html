@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html th:replace="~{templates/layout :: layout(~{::title}, ~{::body}, ~{})}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="templates/layout :: common_header(~{::title},~{})">
+  <title th:text="#{session.login.title}">Log in</title>
+</head>
+<body>
+<h1 th:text="#{session.login.title}">Log in</h1>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+  <form th:method="POST" th:action="@{/login}">
+  <div th:replace="shared/_error_messages :: copy"></div>
+  
+  <label th:for="${#ids.next('email')}" th:text="#{session.login.email}">Email</label>
+  <input type="email" th:field="*{email}" class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'fieldError'" />
+  <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error">Incorrect email</p>
+  
+  <label th:for="${#ids.next('password')}" th:text="#{session.login.password}">Password</label>
+  <input type="password" th:field="*{password}" class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'fieldError'" />
+  <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error">Incorrect password</p>
+  
+  <input type="checkbox" th:field="*{remember_me}" class="form-control" />
+  <label th:for="${#ids.next('remember_me')}" th:text="#{session.login.remember}">Remember me on this computer</label>
+  
+  <input type="submit" value="Log in" th:attr="value=#{session.login.submit}" class="btn btn-primary"/>		
+</form>
+<p>New user? <a th:href="" th:text="session.login.signup">Sign up now!</a></p>
+</div>
+</div>

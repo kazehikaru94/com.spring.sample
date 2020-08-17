@@ -1,20 +1,9 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ page session="false"%>
-<html>
-<head>
-<title><spring:message code="home.title" /></title>
-</head>
-<body>
-	<h1><spring:message code="home.helloworld" /></h1>
-
-	<P>The time on the server is ${serverTime}.</p>
-
-	<form action="user" method="post">
-		<input type="text" name="name"><br> <input
-			type="submit" value="Login">
-	</form>
-</body>
-</html>
+<div class="center jumbotron">
+<h1>Welcome to the Sample App</h1>
+<h2>
+This is the home page for the
+<a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html">Spring MVC</a>
+sample application.
+</h2>
+<a href="users/add" class="btn btn-lg btn-primary">Sign up now!</a>
+</div>
