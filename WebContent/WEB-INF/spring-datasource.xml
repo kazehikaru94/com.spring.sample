@@ -27,7 +27,9 @@
    	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
       	<property name="dataSource" ref="dataSourceBean" />
       	<property name="mappingResources">
-         	<value>com/spring/sample/entity/user.hbm.xml</value>
+      		<list>
+         		<value>com/spring/sample/entity/user.hbm.xml</value>
+         	</list>
       	</property>
       	<property name="hibernateProperties">
          	<props>
@@ -37,17 +39,18 @@
       	</property>
    	</bean>
     
-   <bean id="hibernateTemplateBean" class="org.springframework.orm.hibernate5.HibernateTemplate">
+   <bean id="hibernateTemplate" class="org.springframework.orm.hibernate5.HibernateTemplate">
       <property name="sessionFactory" ref="sessionFactory" />
    </bean>
    
    <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <!-- the transactional semantics... -->
         <tx:attributes>
-            <!-- all methods starting with 'get' are read-only -->
-            <tx:method name="get*" read-only="true"/>
+            <!-- all methods starting with 'find' are read-only -->
+            <tx:method name="find*" read-only="true" propagation="SUPPORTS"/>
             <!-- other methods use the default transaction settings (see below) -->
-            <tx:method name="*" rollback-for="Throwable"/>
+            <tx:method name="update*" read-only="false" propagation="REQUIRED" rollback-for="Throwable"/>
+            <tx:method name="*" read-only="false" propagation="REQUIRED" rollback-for="Throwable"/>
         </tx:attributes>
     </tx:advice>
     

@@ -8,7 +8,7 @@
         https://www.springframework.org/schema/beans/spring-beans.xsd">
     
    <bean id="userDao" class="com.spring.sample.dao.imp.UserDAOImp">
-      <property name="hibernateTemplate" ref="hibernateTemplateBean" />
+      <property name="hibernateTemplate" ref="hibernateTemplate" />
    </bean>
 
 </beans>

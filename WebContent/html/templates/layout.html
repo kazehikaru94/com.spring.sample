@@ -1,9 +1,17 @@
 <!DOCTYPE html>
-<html th:fragment="layout (title, content, links)" xmlns:th="http://www.thymeleaf.org">
+<?xml version="1.0" encoding="UTF-8"?>
+<html th:fragment="layout (title, content, links)" 
+  xmlns:th="http://www.thymeleaf.org" 
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <title th:replace="${title}">[[#{meta.title}]]</title>
   <meta name="description" th:attr="content=#{meta.description}" />
   <meta name="keywords" th:attr="content=#{meta.keywords}" />
+  <!-- <sec:csrfMetaTags ></sec:csrfMetaTags> -->
+	<!-- default header name is X-CSRF-TOKEN -->
+  <meta name="_csrf_header" th:attr="content=${_csrf.headerName}"/>
+  <meta name="_csrf_parameter" th:attr="content=${_csrf.parameterName}"/>
+  <meta name="_csrf" th:attr="content=${_csrf.token}"/>
 	
   <!-- Common styles and scripts -->
   <link rel="stylesheet" type="text/css" media="all" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">

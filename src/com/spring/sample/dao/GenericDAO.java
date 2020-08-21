@@ -5,6 +5,9 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
+import org.springframework.data.domain.Page;
+
+import com.spring.sample.util.SearchQueryTemplate;
 
 /**
  * @author ducda referenced from CaveatEmptor project tm JBoss Hibernate version
@@ -34,5 +37,7 @@ public interface GenericDAO<E, Id extends Serializable> {
 	public List<E> findByCriteria(Criterion... criterion) throws Exception;
 
 	public Timestamp getSystemTimestamp() throws Exception;
+
+	public Page<E> find(final SearchQueryTemplate searchQueryTemplate) throws Exception;
 
 }
