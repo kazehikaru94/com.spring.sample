@@ -1,16 +1,18 @@
 package com.spring.sample.controller;
 
-import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,19 +36,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.spring.sample.interceptor.Flash;
 import com.spring.sample.model.UserModel;
 import com.spring.sample.service.UserService;
-import com.spring.sample.validator.UserValidator;
 
 @Controller
-@RequestMapping("/users")
 @EnableWebMvc
 public class UsersController {
-	private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
+	private static final Logger logger = LoggerFactory.getLogger(UsersController.class);
 
 	@Autowired
 	MessageSource messageSource;
-
-	@Autowired
-	UserValidator userValidator;
 
 	@Autowired
 	@Qualifier("userService")
@@ -57,37 +54,25 @@ public class UsersController {
 
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {
-		binder.addValidators(userValidator);
 	}
 
-	@ModelAttribute("user")
-	public UserModel user(@PathVariable(required = false) Integer id) {
-		if (id == null) {
-			return new UserModel();
-		} else {
-			logger.info("Fetching user(" + id + ") info from database");
-			UserModel userModel = userService.findUser(id);
-			return userModel;
-		}
-	}
-
-	@ModelAttribute("users")
-	public List<UserModel> users() {
-		List<UserModel> userList = userService.findAll();
-		return userList;
-	}
-
-	@GetMapping
-	public String index(Locale locale, Model model) {
+	@GetMapping(value = "/users")
+	public String index(@RequestParam(name = "page", required = false) Optional<Integer> page, Locale locale,
+			Model model, HttpServletRequest request) {
+		UserModel userModel = new UserModel();
+		userModel.setPage(page.orElse(1));
+		Page<UserModel> users = userService.paginate(userModel);
+		model.addAttribute("users", users);
 		return "users/index";
 	}
 
-	@GetMapping(value = "/add")
+	@GetMapping(value = { "/users/add", "/signup" })
 	public String add(Locale locale, Model model) {
+		model.addAttribute("user", new UserModel());
 		return "users/add";
 	}
 
-	@PostMapping
+	@PostMapping(value = "/users")
 	public String create(@ModelAttribute("user") @Validated UserModel userModel, BindingResult bindingResult,
 			Model model, final RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
 		if (bindingResult.hasErrors()) {
@@ -96,24 +81,25 @@ public class UsersController {
 		}
 		UserModel user = userService.addUser(userModel);
 		// Add message to flash scope
-		redirectAttributes.addFlashAttribute("css", "success");
-		redirectAttributes.addFlashAttribute("flash", "user.create.success");
 		flash.success("user.create.success");
 		flash.keep();
+		request.login(userModel.getEmail(), userModel.getPassword());
 		return "redirect: " + request.getContextPath() + "/users/" + user.getId();
 	}
 
-	@GetMapping(value = "/{id}")
-	public String show(@ModelAttribute("user") UserModel userModel, Model model) {
+	@GetMapping(value = "/users/{id}")
+	public String show(@PathVariable Integer id, Model model) {
+		model.addAttribute("user", userService.findUser(id));
 		return "users/show";
 	}
 
-	@GetMapping(value = "/{id}/edit")
-	public String edit(@ModelAttribute("user") UserModel userModel, Model model) {
+	@GetMapping(value = "/users/{id}/edit")
+	public String edit(@PathVariable Integer id, Model model) {
+		model.addAttribute("user", userService.findUser(id));
 		return "users/edit";
 	}
 
-	@PutMapping(value = "/{id}")
+	@PutMapping(value = "/users/{id}")
 	public String update(@ModelAttribute("user") @Validated UserModel userModel, BindingResult bindingResult,
 			Model model, final RedirectAttributes redirectAttributes, HttpServletRequest request) throws Exception {
 		if (bindingResult.hasErrors()) {
@@ -122,22 +108,25 @@ public class UsersController {
 		}
 		UserModel user = userService.editUser(userModel);
 		// Add message to flash scope
-		redirectAttributes.addFlashAttribute("css", "success");
-		redirectAttributes.addFlashAttribute("flash", "user.create.success");
 		flash.success("user.update.success");
 		flash.keep();
 		return "redirect: " + request.getContextPath() + "/users/" + user.getId();
 	}
 
-	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/users/{id}", produces = { MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+			MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<String> destroy(@ModelAttribute("user") UserModel userModel, Model model, HttpServletRequest request)
-			throws Exception {
-		logger.info("Deleting user");
-//		userService.deleteUser(userModel);
-//		return "redirect: " + request.getContextPath() + "/users";
-		return new ResponseEntity<String>("{\"result\" : \"OK\"}", HttpStatus.OK);
-//		return "{'result': OK}";
+	public ResponseEntity<String> destroy(@PathVariable Integer id, Model model, HttpServletRequest request,
+			HttpServletResponse response) throws Exception {
+		logger.info("Deleting user: " + id);
+//		userService.deleteUser(new UserModel(id));
+		String contectType = request.getContentType();
+		if (contectType.equalsIgnoreCase(MediaType.APPLICATION_JSON_VALUE)) {
+			return new ResponseEntity<String>("{\"result\" : \"OK\", \"id\" : " + id + ", \"model\" : \"user\"}", HttpStatus.OK);
+		} else {
+			response.sendRedirect(request.getContextPath() + "/users");
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}
 	}
 
 }

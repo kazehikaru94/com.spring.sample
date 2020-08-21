@@ -1,6 +1,7 @@
 package com.spring.sample.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @SuppressWarnings("serial")
 public class User implements Serializable {
@@ -9,15 +10,19 @@ public class User implements Serializable {
 	private String name;
 	private String email;
 	private String password;
+	private String series;
+	private String token;
+	private Date lastUsed;
+	private Integer role;
 
 	public User() {
 
 	}
-	
+
 	public User(Integer id) {
 		this.id = id;
 	}
-	
+
 	public User(String email, String password) {
 		this.email = email;
 		this.password = password;
@@ -53,6 +58,38 @@ public class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getSeries() {
+		return series;
+	}
+
+	public void setSeries(String series) {
+		this.series = series;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public Date getLastUsed() {
+		return lastUsed;
+	}
+
+	public void setLastUsed(Date lastUsed) {
+		this.lastUsed = lastUsed;
+	}
+
+	public Integer getRole() {
+		return role;
+	}
+
+	public void setRole(Integer role) {
+		this.role = role;
 	}
 
 }

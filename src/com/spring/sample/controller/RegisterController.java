@@ -2,8 +2,6 @@ package com.spring.sample.controller;
 
 import java.util.Locale;
 
-import javax.validation.Valid;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ public class RegisterController {
 	private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
 
 	@Autowired
-	private MessageSource messageSource;
+	MessageSource messageSource;
 
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {

@@ -19,45 +19,52 @@ import com.spring.sample.interceptor.Flash;
 public class StaticPagesController {
 
 	private static final Logger logger = LoggerFactory.getLogger(StaticPagesController.class);
-	
+
 	@Resource
-    private Flash flash;
+	private Flash flash;
 
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String root(Locale locale, Model model, final RedirectAttributes redirectAttributes, HttpServletRequest request) {
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String root(Locale locale, Model model, final RedirectAttributes redirectAttributes,
+			HttpServletRequest request) {
 		logger.info("Home Page Requested, locale = " + locale);
 		redirectAttributes.addFlashAttribute("css", "success");
 		redirectAttributes.addFlashAttribute("flash", "user.create.success");
 		flash.info("user.create.success");
-        flash.keep();
-		return "redirect: " + request.getContextPath() + "/microposts";
+		flash.keep();
+		return "redirect: " + request.getContextPath() + "/users";
 //		return "home.page";
 	}
-	
+
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Home Page Requested, locale = " + locale);
 		return "static_pages/home";
 	}
-	
+
 	@RequestMapping(value = "/help", method = RequestMethod.GET)
 	public String help(Locale locale, Model model) {
 		logger.info("Home Page Requested, locale = " + locale);
 		return "static_pages/help";
 	}
-	
+
 	@RequestMapping(value = "/about", method = RequestMethod.GET)
 	public String about(Locale locale, Model model) {
 		logger.info("Home Page Requested, locale = " + locale);
 		return "static_pages/about";
 	}
-	
+
 	@RequestMapping(value = "/contact", method = RequestMethod.GET)
 	public String contact(Locale locale, Model model) {
 		logger.info("Home Page Requested, locale = " + locale);
 		return "static_pages/contact";
+	}
+
+	@RequestMapping(value = { "/access_denied" }, method = RequestMethod.GET)
+	public String accessDenied() {
+		logger.info("Access denied");
+		return "access_denied";
 	}
 }

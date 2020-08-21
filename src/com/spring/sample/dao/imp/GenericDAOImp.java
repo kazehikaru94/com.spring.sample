@@ -2,19 +2,27 @@ package com.spring.sample.dao.imp;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.LockMode;
+import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.support.HibernateDaoSupport;
 
 import com.spring.sample.dao.GenericDAO;
+import com.spring.sample.util.SearchQueryTemplate;
 
 /**
  * @author ducda referenced from CaveatEmptor project tm JBoss Hibernate version
@@ -123,6 +131,34 @@ public abstract class GenericDAOImp<E, Id extends Serializable> extends Hibernat
 			syatemTimestamp = (Timestamp) obj;
 		}
 		return syatemTimestamp;
+	}
+
+	public Page<E> find(final SearchQueryTemplate searchQueryTemplate) throws Exception {
+		List<E> results = getHibernateTemplate().execute(new HibernateCallback<List<E>>() {
+			public List<E> doInHibernate(Session session) {
+				Query<E> query = session.createQuery(searchQueryTemplate.getSql(), getPersistentClass());
+				searchQueryTemplate.setPageable(query);
+				searchQueryTemplate.setParameters(query);
+				return query.list();
+			}
+		});
+
+		Long count = getHibernateTemplate().execute(new HibernateCallback<Long>() {
+			public Long doInHibernate(Session session) {
+				Query<Long> query = session.createQuery(searchQueryTemplate.getCountSql(), Long.class);
+				searchQueryTemplate.setParameters(query);
+				return query.uniqueResult();
+			}
+		});
+
+		return wrapResult(results, searchQueryTemplate.getPageable(), count);
+	}
+
+	private Page<E> wrapResult(List<E> results, Pageable page, long count) {
+		if (results == null) {
+			results = Collections.emptyList();
+		}
+		return new PageImpl<>(results, page, count);
 	}
 
 }
