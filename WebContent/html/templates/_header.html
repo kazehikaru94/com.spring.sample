@@ -11,6 +11,9 @@
 			<ul class="nav navbar-nav navbar-right">
 				<li><a th:href="@{/home}" th:text="#{header.home}">Home</a></li>
 				<li><a th:href="@{/help}" th:text="#{header.help}">Help</a></li>
+				<th:block th:if="${#request.getSession().getAttribute('user')}">
+				<li th:text="${#request.getSession().getAttribute('user').name}"></li>
+				</th:block>
 				<th:block sec:authorize="!isAuthenticated()">
 				<li><a th:href="@{/login}" th:text="#{header.login}">Log in</a></li>
 				</th:block>
