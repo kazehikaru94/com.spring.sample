@@ -3,9 +3,20 @@ package com.spring.sample.model;
 import javax.validation.constraints.NotEmpty;
 
 import com.spring.sample.entity.Micropost;
+import com.spring.sample.entity.User;
 
 public class MicropostModel {
 	private Integer id;
+	private User user;
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public Integer getId() {
 		return id;
 	}

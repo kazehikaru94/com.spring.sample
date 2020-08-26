@@ -2,6 +2,7 @@ package com.spring.sample.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class User implements Serializable {
@@ -14,6 +15,7 @@ public class User implements Serializable {
 	private String token;
 	private Date lastUsed;
 	private Integer role;
+	private List<Micropost> microposts;
 
 	public User() {
 
@@ -92,4 +94,12 @@ public class User implements Serializable {
 		this.role = role;
 	}
 
+	public List<Micropost> getMicroposts() {
+		return microposts;
+	}
+
+	public void setMicroposts(List<Micropost> microposts) {
+		this.microposts = microposts;
+	}
+	
 }

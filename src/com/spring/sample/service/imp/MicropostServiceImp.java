@@ -5,18 +5,14 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.sample.dao.MicropostDAO;
-import com.spring.sample.dao.UserDAO;
 import com.spring.sample.entity.Micropost;
-import com.spring.sample.entity.User;
 import com.spring.sample.model.MicropostModel;
-import com.spring.sample.model.UserModel;
 import com.spring.sample.service.MicropostService;
-import com.spring.sample.service.UserService;
 
 @Component
 public class MicropostServiceImp implements MicropostService {
@@ -33,7 +29,7 @@ public class MicropostServiceImp implements MicropostService {
 		this.micropostDAO = micropostDAO;
 	}
 
-	public MicropostModel findMicropost(Integer id){
+	public MicropostModel findMicropost(Integer id) {
 		log.info("Checking the micropost in the database");
 		MicropostModel micropostModel = null;
 		try {
@@ -43,6 +39,28 @@ public class MicropostServiceImp implements MicropostService {
 			log.error("An error occurred while fetching the micropost details from the database", e);
 		}
 		return micropostModel;
+	}
+
+	public List<MicropostModel> findMicropostbyUserId(Integer userId) {
+		log.info("Fetching the user by email in the database");
+		try {
+			List<Micropost> microposts = micropostDAO.findMicropostbyUserId(userId);
+			log.info("microposts: " + microposts.size());
+			List<MicropostModel> micropostModels = null;
+			if (microposts != null) {
+				micropostModels = new ArrayList<MicropostModel>();
+				for (Micropost micropost : microposts) {
+					MicropostModel micropostModel = new MicropostModel();
+					BeanUtils.copyProperties(micropost, micropostModel);
+					micropostModels.add(micropostModel);
+				}
+				log.info("micropostModels: " + micropostModels.size());
+			}
+			return micropostModels;
+		} catch (Exception e) {
+			log.error("An error occurred while fetching the user details by email from the database", e);
+			return null;
+		}
 	}
 
 //TO-DO: find micropost by keyword
@@ -58,7 +76,6 @@ public class MicropostServiceImp implements MicropostService {
 //		return userModel;
 //	}
 
-	
 //	Implement later nha
 //	@Transactional
 //	public MicropostModel addMicropost(MicropostModel micropostModel) throws Exception {

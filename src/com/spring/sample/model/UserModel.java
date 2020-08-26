@@ -1,11 +1,14 @@
 package com.spring.sample.model;
 
+import java.util.List;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.springframework.util.StringUtils;
 
+import com.spring.sample.entity.Micropost;
 import com.spring.sample.util.CommonUtil;
 import com.spring.sample.validator.FieldMatch;
 import com.spring.sample.validator.NullOrNotBlank;
@@ -27,6 +30,16 @@ public class UserModel extends BaseModel {
 	private String password = null;
 	@NullOrNotBlank(message = "{user.validation.confirmation.required}")
 	private String confirmation = null;
+	
+	private List<Micropost> microposts;
+
+	public List<Micropost> getMicroposts() {
+		return microposts;
+	}
+
+	public void setMicroposts(List<Micropost> microposts) {
+		this.microposts = microposts;
+	}
 
 	public UserModel() {
 

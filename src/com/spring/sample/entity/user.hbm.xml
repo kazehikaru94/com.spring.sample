@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>  
 <!DOCTYPE hibernate-mapping PUBLIC  
  "-//Hibernate/Hibernate Mapping DTD 5.3//EN"  
- "classpath://org/hibernate/hibernate-configuration-3.0.dtd"> 
+ "https://hibernate.org/dtd/hibernate-mapping-3.0.dtd">  
   
 <hibernate-mapping>  
 	<class name="com.spring.sample.entity.User" table="user">  
@@ -16,7 +16,12 @@
     	<property name="token" column="token" type="string"></property>
     	<property name="lastUsed" column="last_used" type="java.util.Date"></property>
     	<property name="role" column="role" type="int"></property>
+    	    
+    	<list name = "microposts" cascade="all" lazy="true" inverse="false" >
+			<key column = "user_id"/>
+			<list-index column = "id" base="1" />
+			<one-to-many class="com.spring.sample.entity.Micropost"/>
+		</list>
             
   </class>  
-            
 </hibernate-mapping>  

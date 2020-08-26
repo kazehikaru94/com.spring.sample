@@ -4,7 +4,13 @@ public class Micropost {
 	private Integer id;
 	private Integer userId;
 	private String content;
-	
+	private User user;
+
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public Micropost() {
 	}
 	
@@ -33,5 +39,8 @@ public class Micropost {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public User getUser() {
+		return user;
 	}
 }

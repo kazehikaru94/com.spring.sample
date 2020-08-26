@@ -33,6 +33,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.sample.interceptor.Flash;
 import com.spring.sample.model.MicropostModel;
+import com.spring.sample.model.UserModel;
 import com.spring.sample.service.MicropostService;
 
 @Controller
@@ -63,14 +64,11 @@ public class MicropostController {
 		}
 	}
 
-	@ModelAttribute("microposts")
-	public List<MicropostModel> microposts() {
-		List<MicropostModel> micropostList = micropostService.findAll();
-		return micropostList;
-	}
-
 	@GetMapping
-	public String index(Locale locale, Model model) {
+	public String index(Locale locale, Model model, HttpServletRequest request) {
+		UserModel userModel = (UserModel)request.getSession().getAttribute("user");
+		List<MicropostModel> micropostList = micropostService.findMicropostbyUserId(userModel.getId());
+		model.addAttribute("microposts", micropostList);
 		return "microposts/index";
 	}
 

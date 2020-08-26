@@ -17,4 +17,6 @@ public interface MicropostService {
 //	public boolean deleteMicropost(MicropostModel micropostModel) throws Exception;
 //
 	public List<MicropostModel> findAll();
+	
+	public List<MicropostModel> findMicropostbyUserId(Integer userId);
 }
