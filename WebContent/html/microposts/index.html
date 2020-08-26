@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html th:replace="~{templates/layout :: layout(~{::title}, ~{::body}, ~{})}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="templates/layout :: common_header(~{::title},~{})">
+  <title th:text="#{micropost.index.title}">Microposts</title>
+</head>
+<body>
+  <h2 th:text="#{micropost.index.all}">All Microposts</h2>
+
+  <ul class="users">
+    <li th:each="micropost : ${microposts}" th:id="'micropost_'+${micropost.id}">
+      <a th:href="@{'/microposts/'+${micropost.id}}" th:text="${micropost.id}"></a>
+      | <a th:text = "${micropost.userId}"></a>
+      | <a th:href="@{'/microposts/'+${micropost.id}+'/edit'}"
+        th:text="#{micropost.edit}">Edit</a>
+      | <a class="delete-user" th:href="@{'/microposts/'+${micropost.id}}"
+        th:text="#{micropost.delete}" th:data-id="${micropost.id}">Delete</a>
+      | <div th:text = "${micropost.content}"></div>
+    </li>
+  </ul>
+</body>
+</html>

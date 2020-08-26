@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html th:replace="~{templates/layout :: layout(~{::title}, ~{::body}, ~{})}" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="templates/layout :: common_header(~{::title},~{})">
+  <title th:text="#{user.edit.title}">Edit User</title>
+</head>
+<body>
+<h1 th:text="#{user.edit.title}">Edit User</h1>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3" th:insert="users/_form :: form(#{user.edit.submit},@{'/users/'+${user.id}+'/edit'},'PUT')"></div>
+</div>
+</body>
+</html>

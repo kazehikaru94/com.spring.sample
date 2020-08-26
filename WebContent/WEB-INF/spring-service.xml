@@ -11,5 +11,11 @@
 		<qualifier value="userService"/>
     	<property name="userDao" ref="userDao" />
     </bean>
+    
+    <bean id="micropostService" class="com.spring.sample.service.imp.MicropostServiceImp">
+		<qualifier value="micropostService"/>
+    	<property name="micropostDao" ref="micropostDao" />
+    </bean>
+    
 
 </beans>

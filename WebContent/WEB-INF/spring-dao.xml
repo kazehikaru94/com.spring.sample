@@ -11,4 +11,8 @@
       <property name="hibernateTemplate" ref="hibernateTemplate" />
    </bean>
 
+   <bean id="micropostDao" class="com.spring.sample.dao.imp.MicropostDAOImp">
+      <property name="hibernateTemplate" ref="hibernateTemplate" />
+   </bean>
+
 </beans>
