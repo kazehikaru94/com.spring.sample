@@ -7,6 +7,8 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.orm.hibernate5.HibernateCallback;
 import org.springframework.orm.hibernate5.HibernateTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,6 +18,7 @@ import com.spring.sample.entity.Micropost;
 import com.spring.sample.entity.User;
 import com.spring.sample.service.imp.UserServiceImp;
 import com.spring.sample.util.CommonUtil;
+import com.spring.sample.util.SearchQueryTemplate;
 
 @Repository
 public class MicropostDAOImp extends GenericDAOImp<Micropost, Integer> implements MicropostDAO{
@@ -56,5 +59,14 @@ public class MicropostDAOImp extends GenericDAOImp<Micropost, Integer> implement
 			log.error("An error occurred while fetching the user details by email from the database", e);
 			return null;
 		}
+	}
+	
+	@Override
+	public Page<Micropost> paginate (Micropost micropost, Pageable pageable){
+		String sql = "FROM Micropost where userId = :userId";
+		String countSql = "SELECT COUNT(*) FROM Micropost WHERE userId = :userId";
+		SearchQueryTemplate searchQueryTemplate = new SearchQueryTemplate(sql,countSql,pageable);
+		searchQueryTemplate.addParameter("userId", micropost.getUserId());
+		return paginate(searchQueryTemplate);
 	}
 }

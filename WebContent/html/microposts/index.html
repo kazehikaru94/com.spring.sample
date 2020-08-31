@@ -17,5 +17,9 @@
       | <div th:text = "${micropost.content}"></div>
     </li>
   </ul>
+  
+  <th:block th:if="${microposts.totalPages > 1}">
+  	<div th:if = "${microposts.totalPages} > 1" th:replace = "~{shared/_pagination :: copy(${microposts}, '/microposts')}"></div>
+  </th:block>
 </body>
 </html>

@@ -3,15 +3,19 @@ package com.spring.sample.service.imp;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.sample.dao.MicropostDAO;
 import com.spring.sample.entity.Micropost;
 import com.spring.sample.model.MicropostModel;
+import com.spring.sample.model.UserModel;
 import com.spring.sample.service.MicropostService;
 
 @Component
@@ -59,6 +63,29 @@ public class MicropostServiceImp implements MicropostService {
 			return micropostModels;
 		} catch (Exception e) {
 			log.error("An error occurred while fetching the user details by email from the database", e);
+			return null;
+		}
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Page<MicropostModel> paginate (MicropostModel micropostModel){
+			
+		try {
+			Micropost condition = new Micropost();
+			condition.setUserId(micropostModel.getUserId());
+			Page<Micropost> microposts = micropostDAO.paginate(condition, micropostModel.getPageable());
+			return microposts.map(micropost -> {
+				MicropostModel model = new MicropostModel();
+				BeanUtils.copyProperties(micropost, model);
+				UserModel user = new UserModel();
+				BeanUtils.copyProperties(micropost.getUser(), user);
+				model.setUser(user);
+				return model;
+			});
+		}
+		catch (Exception e){
+			log.error(e.getMessage(),e); 
 			return null;
 		}
 	}

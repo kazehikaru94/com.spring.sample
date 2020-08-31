@@ -2,6 +2,7 @@ package com.spring.sample.controller;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -65,10 +68,15 @@ public class MicropostController {
 	}
 
 	@GetMapping
-	public String index(Locale locale, Model model, HttpServletRequest request) {
+	public String index(Locale locale, Model model, HttpServletRequest request, @RequestParam (name = "page", required = false) Optional<Integer> page) {
 		UserModel userModel = (UserModel)request.getSession().getAttribute("user");
-		List<MicropostModel> micropostList = micropostService.findMicropostbyUserId(userModel.getId());
-		model.addAttribute("microposts", micropostList);
+//		List<MicropostModel> micropostList = micropostService.findMicropostbyUserId(userModel.getId());
+//		model.addAttribute("microposts", micropostList);
+		MicropostModel micropostModel = new MicropostModel();
+		micropostModel.setUserId(userModel.getId());
+		micropostModel.setPage(page.orElse(1));
+		Page<MicropostModel> microposts = micropostService.paginate(micropostModel);
+		model.addAttribute("microposts", microposts);
 		return "microposts/index";
 	}
 

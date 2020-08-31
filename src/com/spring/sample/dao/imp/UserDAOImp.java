@@ -60,21 +60,21 @@ public class UserDAOImp extends GenericDAOImp<User, Integer> implements UserDAO 
 
 	@Override
 	public Page<UserModel> paginate(UserModel userModel) {
-		log.info("Paging the users in the database");
-		try {
-			SearchQueryTemplate searchQueryTemplate = new SearchQueryTemplate();
-			searchQueryTemplate.setSql("FROM User");
-			searchQueryTemplate.setCountSql("SELECT COUNT(*) FROM User");
-			searchQueryTemplate.setPageable(userModel.getPageable());
-			Page<User> users = find(searchQueryTemplate);
-			return users.map(user -> {
-				UserModel model = new UserModel();
-				BeanUtils.copyProperties(user, model);
-				return model;
-			});
-		} catch (Exception e) {
-			log.error("An error occurred while paging the user details from the database", e);
+//		log.info("Paging the users in the database");
+//		try {
+//			SearchQueryTemplate searchQueryTemplate = new SearchQueryTemplate();
+//			searchQueryTemplate.setSql("FROM User");
+//			searchQueryTemplate.setCountSql("SELECT COUNT(*) FROM User");
+//			searchQueryTemplate.setPageable(userModel.getPageable());
+//			Page<User> users = find(searchQueryTemplate);
+//			return users.map(user -> {
+//				UserModel model = new UserModel();
+//				BeanUtils.copyProperties(user, model);
+//				return model;
+//			});
+//		} catch (Exception e) {
+//			log.error("An error occurred while paging the user details from the database", e);
 			return null;
-		}
+//		}
 	}
 }

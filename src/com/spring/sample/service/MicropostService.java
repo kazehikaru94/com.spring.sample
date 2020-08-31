@@ -2,6 +2,8 @@ package com.spring.sample.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.spring.sample.model.MicropostModel;
 
 public interface MicropostService {
@@ -19,4 +21,6 @@ public interface MicropostService {
 	public List<MicropostModel> findAll();
 	
 	public List<MicropostModel> findMicropostbyUserId(Integer userId);
+	
+	public Page<MicropostModel> paginate (MicropostModel micropostModel);
 }

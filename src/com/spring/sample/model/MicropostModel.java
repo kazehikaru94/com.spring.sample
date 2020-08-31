@@ -5,15 +5,18 @@ import javax.validation.constraints.NotEmpty;
 import com.spring.sample.entity.Micropost;
 import com.spring.sample.entity.User;
 
-public class MicropostModel {
+public class MicropostModel extends BaseModel{
 	private Integer id;
-	private User user;
+	private UserModel user;
+	private Integer userId;
+	@NotEmpty(message = "{micropost.validation.content.required}")
+	private String content;
 	
-	public User getUser() {
+	public UserModel getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
+	public void setUser(UserModel user) {
 		this.user = user;
 	}
 
@@ -41,9 +44,7 @@ public class MicropostModel {
 		this.content = content;
 	}
 
-	private Integer userId;
-	@NotEmpty(message = "{micropost.validation.content.required}")
-	private String content;
+
 	
 	public static MicropostModel build(Micropost micropost) {
 		MicropostModel micropostModel = new MicropostModel();
